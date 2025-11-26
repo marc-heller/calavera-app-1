@@ -9,13 +9,25 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@szhsin/react-accordion": "^1.4.1",
+    "next": "16.0.0",
+    "rc-slider": "^11.1.9",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "next": "16.0.0"
+    "react-select": "^5.10.2"
   },
   "devDependencies": {
+    "@babel/plugin-syntax-jsx": "^7.27.1",
+    "@babel/preset-react": "^7.28.5",
+    "@emotion/babel-plugin": "^11.13.5",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.0.0"
+    "eslint-config-next": "16.0.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "sass": "^1.93.2",
+    "styled-components": "^6.1.19"
   }
 }
