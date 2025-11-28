@@ -866,6 +866,10 @@ const DiamondListLoaderWrapper = styled.div`
   width: 100%;
   grid-column: span 8;
   padding: 24px 8px 0;
+
+  @media screen and (max-width: 910px) {
+    grid-column: span 4;
+  }
 `;
 
 const NoResults = styled.div`
