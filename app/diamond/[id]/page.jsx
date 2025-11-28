@@ -393,11 +393,11 @@ const NoResult = styled.div`
 const DiamondDetails = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
   flex-flow: row wrap;
   margin-top: 30px;
   font-size: 1rem;
   font-weight: 400;
+  line-height: 1.4;
   
   > div {
     width: 100%;
@@ -407,7 +407,6 @@ const DiamondDetails = styled.div`
 
     @media screen and (max-width: 700px) {
       flex-flow: column nowrap;
-      justify-content: flex-start;
     }
 
     > div {
@@ -747,6 +746,13 @@ export default function Diamond ({ params }) {
                       </div>
 
                       <div>
+                        <div>Clarity</div>
+                        <div> 
+                          {expandAbbreviation(item.diamond.certificate.clarity)}
+                        </div>
+                      </div>
+
+                      <div>
                         <div>Polish</div>
                         <div> 
                           {expandAbbreviation(item.diamond.certificate.polish)}
@@ -813,7 +819,7 @@ export default function Diamond ({ params }) {
                       </div>
 
                       <div>                                                                                  
-                        <div>Certificate #</div>
+                        <div>Certificate No.</div>
                         <div> 
                           {item.diamond.certificate.certNumber}
                         </div>
