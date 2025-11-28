@@ -51,7 +51,7 @@ async function getToken(internalSignal) {
     });
   } catch (err) {
     if (err.name === 'AbortError') {
-      console.log('Client aborted during authentication fetch');
+      console.log('Client aborted during authentication fetch.');
       return NextResponse.json({ success: false, aborted: true }, { status: 499 });
     }
     clientSignal.removeEventListener('abort', abortListener);
@@ -76,7 +76,7 @@ async function getToken(internalSignal) {
 
   let res = await authenticate_result.json();
   
-  console.log('++ getDiamonds authenticate_result.json', res);
+  console.log('getDiamonds authenticate_result.json', res);
 
   // the authentication token to get in future requests
   if (res?.data?.authenticate?.username_and_password?.token) {
@@ -86,9 +86,10 @@ async function getToken(internalSignal) {
     cachedToken = token;
     cachedTokenExpires = expires;
 
-    console.log('++ TOKEN', token, expires);
+    console.log('TOKEN and expires', token, expires);
   } else {
     clientSignal.removeEventListener('abort', abortListener);
+    console.log('Authentication failed.');
     return NextResponse.json({ success: false, error: 'Authentication failed' });
   }
 
@@ -111,7 +112,7 @@ export async function POST(request) {
   }
   clientSignal.addEventListener('abort', abortListener);
 
-  console.log('getDiamonds clientSignal', clientSignal);
+  // console.log('getDiamonds clientSignal', clientSignal);
 
   const requestJson = await request.json();
 
@@ -522,7 +523,7 @@ PARTIAL ITEMS JUST FOR CATEGORY PAGE:
     }
   `;
 
-  console.log('***** diamond_query', diamond_query);
+  // console.log('***** diamond_query', diamond_query);
 
   let result;
 
@@ -545,7 +546,7 @@ PARTIAL ITEMS JUST FOR CATEGORY PAGE:
     });
   } catch (err) {
     if (err.name === 'AbortError') {
-      console.log('Client aborted during diamonds fetch');
+      console.log('Client aborted during diamonds fetch.');
       clientSignal.removeEventListener('abort', abortListener);
       return NextResponse.json({ success: false, aborted: true }, { status: 499 });
     }
@@ -555,10 +556,9 @@ PARTIAL ITEMS JUST FOR CATEGORY PAGE:
   const resultsTime = Date.now() - startTime;
   console.log('resultsTime', resultsTime);
 
-  console.log('*****++ result', result);
-
   if (!result.ok) {
     clientSignal.removeEventListener('abort', abortListener);
+    console.log(`API network response was not OK. Status: ${result.status}, ${result.statusText}`);
     return NextResponse.json({ success: false, error: `API network response was not OK. Status: ${result.status}, ${result.statusText}` });
     /*
     throw new Error(
@@ -567,10 +567,9 @@ PARTIAL ITEMS JUST FOR CATEGORY PAGE:
     */
   }
 
-
   let diamond_res = await result.json();
 
-  console.log('))))))))))))))))))) diamond_res', diamond_res);
+  console.log('diamond_res', diamond_res);
 
   clientSignal.removeEventListener('abort', abortListener);
   
@@ -579,7 +578,7 @@ PARTIAL ITEMS JUST FOR CATEGORY PAGE:
     const resultCount = diamond_res.data?.diamonds_by_query_count
   
     let isMore = items.length === limit ? true : false;
-    console.log('***** SUCCESS TRUE total_count, isMore', total_count, isMore);
+    console.log('SUCCESS: TRUE total_count, isMore', total_count, isMore);
     return NextResponse.json({ 
       success: true, 
       items, 
@@ -588,7 +587,7 @@ PARTIAL ITEMS JUST FOR CATEGORY PAGE:
       isMore: isMore 
     });
   } else {
-    console.log('***** SUCCESS FALSE diamond_res.data', diamond_res.data);
+    console.log('SUCCESS: FALSE');
     let error = '';
     if (diamond_res?.errors.length > 0) {
       error = diamond_res?.errors[0]?.message;

@@ -742,7 +742,8 @@ const CertNumberSubmitButton = styled.button`
   font-family: ${theme.fonts.primary};
   font-weight: 600;
   font-size: 1rem;
-  padding: 3px 20px;
+  line-height: 1.05;
+  padding: 6px 20px;
   outline: none;
   border: 1px solid hsl(0, 0%, 80%);
   border-radius: 6px;

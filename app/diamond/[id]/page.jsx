@@ -36,7 +36,7 @@ const BackButton = styled.div`
 const LeftChevronContainer = styled.div`
   width: 20px;
   height: 20px;
-  margin: -5px 4px 0 0;
+  margin: -6px 4px 0 0;
   color: hsl(0, 0%, 20%);
 
   svg {

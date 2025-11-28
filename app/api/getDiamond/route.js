@@ -51,10 +51,11 @@ async function getToken(internalSignal) {
     });
   } catch (err) {
     if (err.name === 'AbortError') {
-      console.log('Client aborted during authentication fetch');
+      console.log('Client aborted during authentication fetch.');
       return NextResponse.json({ success: false, aborted: true }, { status: 499 });
     }
     clientSignal.removeEventListener('abort', abortListener);
+    console.log('Authentication failed.');
     return NextResponse.json({ success: false, error: 'Authentication failed' });
     // throw err;
   }
@@ -76,7 +77,7 @@ async function getToken(internalSignal) {
 
   let res = await authenticate_result.json();
   
-  console.log('++ getDiamonds authenticate_result.json', res);
+  console.log('getDiamonds authenticate_result.json', res);
 
   // the authentication token to get in future requests
   if (res?.data?.authenticate?.username_and_password?.token) {
@@ -86,7 +87,7 @@ async function getToken(internalSignal) {
     cachedToken = token;
     cachedTokenExpires = expires;
 
-    console.log('++ TOKEN', token, expires);
+    console.log('TOKEN and expires', token, expires);
   } else {
     clientSignal.removeEventListener('abort', abortListener);
     return NextResponse.json({ success: false, error: 'Authentication failed' });
@@ -121,13 +122,6 @@ export async function POST(request) {
   }
   
   console.log('getDiamonds requestJson', requestJson);
-  /*
-  const [WORDPRESS_SEARCH_REST_API_URL, searchTerm, page] = CheckForUndefined([
-    process.env.WORDPRESS_SEARCH_REST_API_URL,
-    requestJson.searchTerm,
-    requestJson.nextPage,
-  ]);
-  */
 
   const token = await getToken(internalSignal);
   
@@ -137,7 +131,7 @@ export async function POST(request) {
 
   const startTime = Date.now();
 
-  // note that this does not include all available fields, to see more fields please refer to the documentation
+  // Note that this does not include all available fields, to see more fields please refer to the documentation
   
   let diamond_query = `
     query {
@@ -182,7 +176,7 @@ export async function POST(request) {
     }
   `;
 
-  console.log('***** diamond_query', diamond_query);
+  // console.log('***** diamond_query', diamond_query);
 
   let result;
 
@@ -215,8 +209,6 @@ export async function POST(request) {
   const resultsTime = Date.now() - startTime;
   console.log('resultsTime', resultsTime);
 
-  console.log('*****++ result', result);
-
   if (!result.ok) {
     clientSignal.removeEventListener('abort', abortListener);
     return NextResponse.json({ success: false, error: `API network response was not OK. Status: ${result.status}, ${result.statusText}` });
@@ -230,7 +222,7 @@ export async function POST(request) {
 
   let diamond_res = await result.json();
 
-  console.log('))))))))))))))))))) diamond_res', diamond_res);
+  console.log('diamond_res', diamond_res);
 
   clientSignal.removeEventListener('abort', abortListener);
   
@@ -242,7 +234,7 @@ export async function POST(request) {
       item: item, 
     });
   } else {
-    console.log('***** SUCCESS FALSE diamond_res.data', diamond_res.data);
+    console.log('SUCCESS: FALSE');
     let error = '';
     if (diamond_res?.errors.length > 0) {
       error = diamond_res?.errors[0]?.message;
