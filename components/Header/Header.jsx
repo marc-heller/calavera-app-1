@@ -2,6 +2,7 @@
 
 import styled from 'styled-components';
 // import { Inter } from 'next/font/google';
+import theme from '@/app/theme';
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -12,6 +13,10 @@ const HeaderContainer = styled.div`
 
   img {
     padding: 20px 20px 20px 60px;
+
+    @media screen and (max-width: ${theme.breakpoints.sm}) {
+      padding: 20px 20px 20px 30px;
+    }
   }
 `;
 
