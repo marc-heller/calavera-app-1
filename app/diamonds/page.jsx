@@ -395,6 +395,15 @@ const DiamondList = styled.div`
     margin-left: 8px;
   }
 
+  @media screen and (max-width: 910px) {
+    > *:nth-of-type(1),
+    > *:nth-of-type(2),
+    > *:nth-of-type(3),
+    > *:nth-of-type(4) {
+      border-bottom: 1px solid hsl(0, 0%, 80%);
+    }
+  }
+
   > *:nth-of-type(1),
   > *:nth-of-type(2),
   > *:nth-of-type(3),
@@ -415,6 +424,10 @@ const DiamondList = styled.div`
   > *:nth-of-type(16n + 7),
   > *:nth-of-type(16n + 8) {
     background-color: ${theme.colors.lightestTan}; /* every second row */
+    
+    @media screen and (max-width: 910px) {
+      padding-top: 8px;
+    }
   }
 `;
 
@@ -531,6 +544,10 @@ const FilterItem = styled.div`
   min-width: 325px;
   display: flex;
   flex-flow: column nowrap;
+
+  &.girdle {
+    margin-bottom: 12px;
+  } 
 
   .certifications {
     display: flex;
@@ -2434,7 +2451,7 @@ export default function Diamonds () {
               </RangeFilter>
             </FilterItem>
 
-            <FilterItem>
+            <FilterItem className="girdle">
               <RangeLabel>Girdle Thickness</RangeLabel>
               <RangeFilter $markLeft={6}>
                 <Slider 
