@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useRef, Fragment } from 'react';
 // import { Suspense } from 'react';
 // import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 // import { notFound } from 'next/navigation';
 // import { revalidatePath } from 'next/cache';
 // import parse from 'html-react-parser';
@@ -20,6 +21,7 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 // import sampleItems from './data';
 import useIsIntersecting from '@/hooks/useIsIntersecting';
+import { avenir } from '@/app/fonts';
 
 const breakpointFilters = '950px';
 
@@ -35,7 +37,7 @@ const Header = styled.div`
   font-family: ${theme.fonts.primary};
   font-size: 1.9rem;
   font-weight: 600;
-  padding: 28px 0 8px;
+  padding: 30px 0 8px;
 `;
 
 const Filters = styled.div`
@@ -51,7 +53,7 @@ const Filters = styled.div`
     flex-flow: row wrap;
     column-gap: 50px;
     row-gap: 24px;
-    border: 1px solid #000;
+    border: 1px solid hsl(0, 0%, 20%);
     border-radius: 6px;
     padding: 20px 30px;
     background: #fff;
@@ -72,7 +74,8 @@ const Filters = styled.div`
   }
 
   .rc-slider-mark-text {
-    font-family: ${theme.fonts.primary};
+    color: hsl(0, 0%, 20%);
+    font-family: ${theme.fonts.secondary};
     font-size: 1rem;
     font-weight: 600;
   }
@@ -104,7 +107,7 @@ const Filters = styled.div`
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: #000;
+    background: ${theme.colors.tan};
     transform: translate(-50%, -50%) scale(0);
     opacity: 0;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -114,7 +117,7 @@ const Filters = styled.div`
   .rc-slider-handle:hover::before,
   .rc-slider-handle-dragging::before {
     transform: translate(-50%, -50%) scale(1);
-    opacity: .3;
+    opacity: .8;
   }
 
   /* Pressed: pulse animation */
@@ -192,7 +195,7 @@ const GridContainer = styled.div`
 
   > div > div {
     width: 100%;
-    border: 6px solid #bca86b;
+    border: 6px solid ${theme.colors.tan}; /* #bca86b; */
     border-radius: 12px;
     padding: 20px;
     background: ${theme.colors.lightGray};
@@ -240,6 +243,7 @@ const DiamondImage = styled.div`
   background-image: ${props => props.$src ? `url(${props.$src})` : 'none'};
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   border-radius: 10px;
   overflow: hidden;
 `;
@@ -253,10 +257,13 @@ const TileHeading = styled.div`
   font-size: 1rem;
   font-weight: 600;
   padding: 10px 10px 0;
+	color: hsl(0, 0%, 20%);
+	margin-top: 1px;
 `;
 
 const TileDetails = styled.div`
-  padding: 4px 10px 0;
+  padding: 2px 10px 0;
+  color: hsl(0, 0%, 20%);
   font-size: .75rem;
 
   span {
@@ -271,6 +278,7 @@ const TileFooter = styled.div`
 `;
 
 const Price = styled.div`
+  font-family: ${theme.fonts.secondary};
   font-size: 1rem;
   font-weight: 600;
 `;
@@ -279,6 +287,8 @@ const Certification = styled.div`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  color: ${theme.colors.darkestTan};
+  font-family: ${theme.fonts.secondary};
   font-size: .75rem;
 `;
 
@@ -403,14 +413,16 @@ const DiamondList = styled.div`
 const DiamondListCellContainer = styled.div`
   background: ${props => props.$isHovered ? theme.colors.lightTan + '!important' : 'initial'};
   cursor: pointer;
+  user-select: none;
 `;
 
-const DiamondListCell = ({ row, hoveredRow, setHoveredRow, children }) => {
+const DiamondListCell = ({ row, hoveredRow, setHoveredRow, handleListItemClick, children }) => {
   return (
     <DiamondListCellContainer 
       $isHovered={row===hoveredRow}
       onMouseEnter={() => setHoveredRow(row)}
       onMouseLeave={() => setHoveredRow(null)}
+      onClick={() => handleListItemClick(row)}
     >
       { children }
     </DiamondListCellContainer>
@@ -565,7 +577,7 @@ const FilterItem = styled.div`
     }
 
     input:checked {
-      accent-color: ${theme.colors.primary};
+      accent-color: ${theme.colors.darkestTan};
     }
   }
 `;
@@ -596,6 +608,7 @@ const RangeLabel = styled.div`
   flex: none;
   width: 100%;
   margin: 10px 0 0 -4px;
+  color: ${theme.colors.darkestTan};
   font-family: ${theme.fonts.primary};
   font-size: 1rem;
   font-weight: 600;
@@ -656,6 +669,7 @@ const RangeFields = styled.div`
     padding: 2px 8px;
     outline: none;
     border: 1px solid #ccc;
+    font-family: ${theme.fonts.secondary};
     font-size: .75rem;
   }
 `;
@@ -725,7 +739,7 @@ const CollapsibleHeader = styled.div`
   > div {
     width: 100%;
     max-width: ${theme.breakpoints.xl};
-    border: 1px solid #000;
+    border: 1px solid hsl(0, 0%, 20%);
     border-radius: 6px;
     display: flex;
     justify-content: center;
@@ -746,11 +760,11 @@ const CollapsibleHeader = styled.div`
 
     &:hover {
       background: ${theme.colors.lightTan};
-      color: ${theme.colors.primary}; 
+      color: ${theme.colors.darkestTan}; 
       transition: .3s;
 
       path {
-        fill: ${theme.colors.primary};
+        fill: ${theme.colors.darkestTan}; 
       }
     }
   }
@@ -801,6 +815,10 @@ const FilterIconContainer = styled.div`
   width: 30px;
   height: 30px;
   margin-right: 10px;
+
+  &+ div {
+    margin-top: 2px;
+  }
 
   svg {
     width: 100%;
@@ -1093,7 +1111,6 @@ export default function Diamonds () {
           !loading) {
       setPage(prev => prev + 1);
     } else if (loadedPage===page && loading) {
-      console.log('setLoading false line 1050');
       setLoading(false);
     }
   }, [isIntersectingLoadMore, page, loadedPage, isMoreData]);
@@ -1108,9 +1125,20 @@ export default function Diamonds () {
 
   const controllerRef = useRef(null);
 
+  const [fetchDataSuccess, setFetchDataSuccess] = useState(false);
+  const [fetchDataTrigger, setFetchDataTrigger] = useState(0);
+
   useEffect(() => {
-    console.log('RUNNING FETCH DATA USE EFFECT LINE 1063 submitCertNumber, sortOrder, page, isMoreData, submitFilters', 
-      submitCertNumber, sortOrder, page, isMoreData, submitFilters );
+    // Retry fetching data if it has failed
+    if (!loading && fetchDataSuccess===false) {
+      setFetchDataTrigger(prev => prev + 1);
+    }
+  }, [loading, fetchDataSuccess]);
+
+  
+  useEffect(() => {
+    // console.log('RUNNING FETCH DATA USE EFFECT LINE 1063 submitCertNumber, sortOrder, page, isMoreData, submitFilters', 
+    //  submitCertNumber, sortOrder, page, isMoreData, submitFilters );
 
     if (controllerRef.current) controllerRef.current.abort();
     const controller = new AbortController();
@@ -1166,7 +1194,8 @@ export default function Diamonds () {
 
     async function fetchData(page) {
       setLoading(true);
-      console.log('fetchData setLoading true');
+      setFetchDataSuccess(false);
+      // console.log('fetchData setLoading true');
       setError(null);
       setIsMoreData(true);
       const { 
@@ -1207,7 +1236,7 @@ export default function Diamonds () {
             hasImage: hasImage
           };
 
-        console.log('================= fetchData payload', payload);
+        // console.log('================= fetchData payload', payload);
         const options = {
           method: 'POST',
           headers: {
@@ -1223,14 +1252,13 @@ export default function Diamonds () {
           */
         };
 
-        console.log('options', options);
+        // console.log('options', options);
         const response = await fetch(
           `/api/getDiamonds`,
           options,
         );
 
-        console.log('response', response);
-        // console.log('brand', brand);
+        // console.log('response', response);
 
         if (response.status===499) { // Call was aborted
           console.log('RESPONSE ABORTED 499');
@@ -1244,7 +1272,7 @@ export default function Diamonds () {
         }
 
         const json = await response.json();
-        console.log('page json', json);
+        // console.log('page json', json);
         if (json?.errors !== null && json?.errors !== undefined) {
           const message = json.errors[0]?.message;
           throw new Error(`GraphQL error: ${message}`);
@@ -1259,17 +1287,19 @@ export default function Diamonds () {
         items = items.map(item => {
           return {
             ...item, 
-            price: item.price>0 ? item.price/100 : 0
+            price: item.price>0 ? item.price/100 : 0,
+            id: item.id.replace('DIAMOND/', '')
           }
         });
         
-        console.log('items', items);
+        // console.log('items', items);
         if (!items || items === null) {
           console.log('ITEMS NOT FOUND');
           // revalidatePath(`/articles/${slug}`);
           // notFound();
         } else {
     
+          setFetchDataSuccess(true);
           // console.log('totalCount', totalCount, 'page', page, 'isMore', isMore);
           if (page>1) {
             setItems(prev => [...prev, ...items]);
@@ -1281,7 +1311,7 @@ export default function Diamonds () {
           setLoadedPage(page);
           setIsMoreData(isMore);
         }
-        console.log('setLoading false line 1238');
+        // console.log('setLoading false line 1238');
         setLoading(false);
         // clear controller ref so next fetch can start immediately
       } catch (err) {
@@ -1292,16 +1322,16 @@ export default function Diamonds () {
           return;
         }
         setError(err);
-        console.log('setLoading false line 1246');
+        // console.log('setLoading false line 1246');
         setLoading(false);
       } finally {
         controllerRef.current = null;
       }
     }
 
-    console.log('LINE 884', isMoreData, submitFilters);
+    // console.log('LINE 884', isMoreData, submitFilters);
     if (!submitFilters || !isMoreData) return;
-    console.log('LINE 886');
+    // console.log('LINE 886');
     fetchData(page);
     
     /*
@@ -1315,10 +1345,10 @@ export default function Diamonds () {
     */
 
     return () => {
-      console.log('CANCELLED FETCH DATA USE EFFECT');
+      // console.log('CANCELLED FETCH DATA USE EFFECT');
       controllerRef.current?.abort();
     };
-  }, [submitFilters, submitCertNumber, sortOrder, page, isMoreData]); // sampleItems
+  }, [submitFilters, submitCertNumber, sortOrder, page, isMoreData, fetchDataTrigger]); // sampleItems
 
   
   const handleFilterDescriptiveRangeChange = (name, value, isChangeComplete) => {
@@ -1350,14 +1380,14 @@ export default function Diamonds () {
           [name]: value
         }
       })
+    }
     if (isChangeComplete && (submitFilters[name][0]!==value[0] || submitFilters[name][1]!==value[1])) {
-        setSubmitFilters((prev) => {
-          return {
-            ...prev,
-            [name]: value
-          }
-        })
-      }
+      setSubmitFilters((prev) => {
+        return {
+          ...prev,
+          [name]: value
+        }
+      }) 
     }
   }
 
@@ -1461,8 +1491,6 @@ export default function Diamonds () {
   const [pricePerCaratValues, setPricePerCaratValues] = useState([pricePerCaratTable[0], pricePerCaratTable[pricePerCaratTable.length - 1]]);
 
   const handlePriceFilterChange = (name, value, isChangeComplete) => {
-    console.log('handlePriceFilterChange', value, isChangeComplete);
-
     if (name==='pricePerCarat') {
       setPricePerCaratValues([pricePerCaratTable[value[0]], pricePerCaratTable[value[1]]]);
     } else {
@@ -1478,7 +1506,6 @@ export default function Diamonds () {
 
     }
   if (isChangeComplete && (submitFilters[name][0]!==value[0] || submitFilters[name][1]!==value[1])) {
-      console.log('handlePriceFilterChange CHANGE COMPLETE');
       setSubmitFilters((prev) => {
         return {
           ...prev,
@@ -1614,9 +1641,8 @@ export default function Diamonds () {
   };
 
   const handleChangeSortOrder = (selectedOption) => {
-    console.log('selectedOption', selectedOption);
     if (sortOrder.value.type!==selectedOption.value.type || sortOrder.value.direction!==selectedOption.value.direction) setSortOrder(selectedOption);
-  }
+  };
 
   const toggleHasImage = () => {
     setFilters((prev) => {
@@ -1625,7 +1651,13 @@ export default function Diamonds () {
         hasImage: !prev.hasImage
       }
     });
-  }
+    setSubmitFilters((prev) => {
+      return {
+        ...prev,
+        hasImage: !prev.hasImage
+      }
+    });
+  };
 
   const [expanded, setExpanded] = useState('');
 
@@ -1635,26 +1667,34 @@ export default function Diamonds () {
     } else if (expanded!==name) {
       setExpanded(name);
     }
-  }
+  };
   
   const handleCertNumberFieldChange = (e) => {
     const { value } = e.target;
     setCertNumber(value);
-  }
+  };
 
   const handleCertNumberFieldBlur = (e) => {
     setSubmitCertNumber(certNumber.trim());
-  }
+  };
 
   const handleCertNumberSubmitClick = () => {
     if (certNumber!=='') setSubmitCertNumber(certNumber.trim());
-  }
+  };
   
   const handleClickView = (view) => {
     setView(view);
-  }  
+  };
 
   const [hoveredRow, setHoveredRow] = useState(null);
+
+  const router = useRouter();
+
+  const handleListItemClick = (index) => {
+    if (items[index] && items[index].id) {
+      router.push('/diamond/'+items[index].id);
+    }
+  }
 
   return (
     <Background>
@@ -1923,7 +1963,7 @@ export default function Diamonds () {
                 <Slider 
                   value={[filters.table[0], filters.table[1]]}
                   onChange={(value) => handleFilterNumericRangeChange('table', value, false)}
-                  onChangeComplete={(value) => handleFilterDescriptiveRangeChange('table', value, true)}
+                  onChangeComplete={(value) => handleFilterNumericRangeChange('table', value, true)}
                   range 
                   step={1} 
                   min={0} 
@@ -2589,11 +2629,11 @@ export default function Diamonds () {
                       ...baseStyles,
                       /* color: theme.colors.primary, */
                       textAlign: 'left',
-                      borderColor: state.isFocused ? theme.colors.primary : 'hsl(0, 0%, 80%)',
-                      boxShadow: state.isFocused ? '0 0 0 1px ' + theme.colors.primary : 'initial',
+                      borderColor: state.isFocused ? theme.colors.darkTan : 'hsl(0, 0%, 80%)',
+                      boxShadow: state.isFocused ? '0 0 0 1px ' + theme.colors.darkTan : 'initial',
                       '&:hover': {
-                        borderColor: theme.colors.primary,
-                        boxShadow: '0 0 0 1px '+theme.colors.primary,
+                        borderColor: theme.colors.darkTan,
+                        boxShadow: '0 0 0 1px '+theme.colors.darkTan,
                       },       
                     }),
                     /* 
@@ -2675,6 +2715,7 @@ export default function Diamonds () {
                             row={index}
                             hoveredRow={hoveredRow}
                             setHoveredRow={setHoveredRow}
+                            handleListItemClick={handleListItemClick}
                           >
                             <DiamondImageList
                               $src={item.diamond.image}
@@ -2686,6 +2727,7 @@ export default function Diamonds () {
                             row={index}
                             hoveredRow={hoveredRow}
                             setHoveredRow={setHoveredRow}
+                            handleListItemClick={handleListItemClick}
                           >
                             {item.diamond.certificate.carats}
                           </DiamondListCell>
@@ -2694,6 +2736,7 @@ export default function Diamonds () {
                             row={index}
                             hoveredRow={hoveredRow}
                             setHoveredRow={setHoveredRow}
+                            handleListItemClick={handleListItemClick}
                           >
                             { 
                               item.diamond.certificate.shape.charAt(0).toUpperCase() + 
@@ -2705,6 +2748,7 @@ export default function Diamonds () {
                             row={index}
                             hoveredRow={hoveredRow}
                             setHoveredRow={setHoveredRow}
+                            handleListItemClick={handleListItemClick}
                           >
                             {item.diamond.certificate.color}
                           </DiamondListCell>
@@ -2713,6 +2757,7 @@ export default function Diamonds () {
                             row={index}
                             hoveredRow={hoveredRow}
                             setHoveredRow={setHoveredRow}
+                            handleListItemClick={handleListItemClick}
                           >
                             {item.diamond.certificate.clarity}
                           </DiamondListCell>
@@ -2721,6 +2766,7 @@ export default function Diamonds () {
                             row={index}
                             hoveredRow={hoveredRow}
                             setHoveredRow={setHoveredRow}
+                            handleListItemClick={handleListItemClick}
                           >
                             {item.diamond.certificate.cut}
                           </DiamondListCell>
@@ -2729,6 +2775,7 @@ export default function Diamonds () {
                             row={index}
                             hoveredRow={hoveredRow}
                             setHoveredRow={setHoveredRow}
+                            handleListItemClick={handleListItemClick}
                           >
                             {item.diamond.certificate.lab}
                           </DiamondListCell>
@@ -2737,11 +2784,12 @@ export default function Diamonds () {
                             row={index}
                             hoveredRow={hoveredRow}
                             setHoveredRow={setHoveredRow}
+                            handleListItemClick={handleListItemClick}
                           >
                             ${item.price.toLocaleString("en-US", {
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 2
-                            })}
+                            })} USD
                           </DiamondListCell>
                         </Fragment>
                       )
@@ -2762,7 +2810,7 @@ export default function Diamonds () {
                             {item?.diamond?.image && 
                               <>
                                 <Link
-                                  href={`/diamonds/${item.id}`}
+                                  href={`/diamond/${item.id}`}
                                 >     
                                   <DiamondImage
                                     $src={item.diamond.image}

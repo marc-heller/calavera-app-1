@@ -50,7 +50,7 @@ const Spinner = styled.div`
     animation: rotate 2s linear infinite;
 
     circle {
-      stroke: ${theme.colors.primary};
+      stroke: #473f21; // #534822 // #625423
       stroke-linecap: round;
       animation: dash 1.5s ease-in-out infinite;
     }

@@ -121,7 +121,10 @@ export async function POST(request) {
     crownAngle, pavilionAngle, girdle, pricePerCarat, hasImage
   } = requestJson;
 
-  if (!page || page===0) return NextResponse.json({ success: false });
+  if (!page || page===0) {
+    clientSignal.removeEventListener('abort', abortListener);
+    return NextResponse.json({ success: false });
+  }
   
   console.log('getDiamonds requestJson', requestJson);
   /*
@@ -532,9 +535,11 @@ PARTIAL ITEMS JUST FOR CATEGORY PAGE:
       },
       body: JSON.stringify({ 
         query: diamond_query,
+        /*
         variables: {
           color: color,
         } 
+        */
       }),
       signal: internalSignal,
     });
@@ -576,7 +581,8 @@ PARTIAL ITEMS JUST FOR CATEGORY PAGE:
     let isMore = items.length === limit ? true : false;
     console.log('***** SUCCESS TRUE total_count, isMore', total_count, isMore);
     return NextResponse.json({ 
-      success: true, items, 
+      success: true, 
+      items, 
       totalCount: total_count, 
       resultCount: resultCount,
       isMore: isMore 

@@ -23,7 +23,7 @@ const Shape = styled.div`
     visibility: hidden;
     opacity: 0;
     background-color: #333;
-    font-family: ${theme.fonts.primary};
+    font-family: ${theme.fonts.secondary};
     font-size: .75rem;
     color: #fff;
     padding: 4px 8px;
@@ -36,6 +36,7 @@ const Shape = styled.div`
 
   &:hover span {
     visibility: visible;
+
     opacity: 1;
   }
 `;
@@ -61,8 +62,14 @@ const CheckLabel = styled.label`
     transition: 300ms ease;
 
     &:hover {
-      background: rgba(97, 97, 97, .15);
-      border: 4px solid transparent;
+      background: ${theme.colors.lightTan}; // rgba(97, 97, 97, .15);
+      border: 4px solid ${theme.colors.lightTan};
+    }
+  }
+
+  input:not(:checked) + div {
+    &:hover {
+      outline: 2px solid ${theme.colors.lightTan};
     }
   }
 
