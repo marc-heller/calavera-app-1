@@ -2740,7 +2740,7 @@ export default function Diamonds () {
                     <div>Color</div>
                     <div>Clarity</div>
                     <div>Cut</div>
-                    <div>Cert #</div>
+                    <div>Cert.</div>
                     <div>Price (USD)</div>
                     {items.map((item, index) => {
                       return (
