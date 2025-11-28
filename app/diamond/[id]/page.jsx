@@ -615,7 +615,7 @@ export default function Diamond ({ params }) {
         <BackButton>
           <Link href="/diamonds">
             <LeftChevron /> 
-            <div>Back</div>
+            <div>Browse</div>
           </Link>
         </BackButton>
         <div>

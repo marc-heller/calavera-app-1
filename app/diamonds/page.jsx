@@ -104,10 +104,10 @@ const Filters = styled.div`
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 32px;
-    height: 32px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: ${theme.colors.tan};
+    border: 8px solid ${theme.colors.tan};
     transform: translate(-50%, -50%) scale(0);
     opacity: 0;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -253,6 +253,7 @@ const DiamondImage = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 10px;
+  border: 1px solid hsl(0, 0%, 80%);
   overflow: hidden;
 `;
 
@@ -282,6 +283,7 @@ const TileDetails = styled.div`
 const TileFooter = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px 10px 10px;
 `;
 
@@ -294,10 +296,18 @@ const Price = styled.div`
 const Certification = styled.div`
   display: flex;
   flex-flow: row nowrap;
-  align-items: center;
   color: ${theme.colors.darkestTan};
   font-family: ${theme.fonts.secondary};
   font-size: .75rem;
+  margin-top: 2px;
+
+  > div:first-of-type {
+    margin-right: 3px;
+  }
+
+  > div:last-of-type {
+    margin-top: 5px;
+  }
 `;
 
 const DiamondList = styled.div`
@@ -2907,8 +2917,8 @@ export default function Diamonds () {
                                   }  
                                   {item?.diamond?.certificate?.lab && 
                                     <Certification>    
-                                      <DiamondSVG />&nbsp;
-                                      {item.diamond.certificate.lab} Certified
+                                      <div><DiamondSVG /></div>
+                                      <div>{item.diamond.certificate.lab} Certified</div>
                                     </Certification> 
                                   }
                                 </TileFooter>     
