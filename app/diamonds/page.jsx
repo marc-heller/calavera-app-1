@@ -715,7 +715,7 @@ const CertNumberSubmitButton = styled.button`
   font-family: ${theme.fonts.primary};
   font-weight: 600;
   font-size: 1rem;
-  padding: 4px 20px;
+  padding: 3px 20px;
   outline: none;
   border: 1px solid hsl(0, 0%, 80%);
   border-radius: 6px;
@@ -1403,7 +1403,7 @@ export default function Diamonds () {
     let { name, value } = e.target;
     let [filterName, index] = name.split('[');
     index = parseInt(index.replace(']', ''));
-    let newRange = filters[filterName];
+    let newRange = [...filters[filterName]];
     value = value.replace(/[^0-9.]/g, '');
     value = value.replace(/(?<=\..*)\./g, '');
     if (value==='' || Number.isNaN(value)) {
@@ -1423,19 +1423,25 @@ export default function Diamonds () {
     let [filterName, index] = name.split('[');
     index = parseInt(index.replace(']', ''));
     value = parseFloat(value);
-    let newRange = filters[filterName];
+    console.log('handleFilterFieldBlur value', value);
+    let newRange = [parseFloat(filters[filterName][0]), parseFloat(filters[filterName][1])]; 
     if (index === 0 && value < parseFloat(e.target.min)) {
-      value = parseFloat(e.target.min);
+      newRange[0] = parseFloat(e.target.min);
+          console.log('handleFilterFieldBlur a newRange[0]', newRange[0]);
     } else if (index === 1 && value > parseFloat(e.target.max)) {
-      value = parseFloat(e.target.max);
+      newRange[1] = parseFloat(e.target.max);
     }
     if (index===0 && value > newRange[1]) {
-      value = parseFloat(newRange[1]);
+      
+      newRange[0] = parseFloat(newRange[1]);
+      newRange[0] = Math.round(newRange[0] * 100) / 100;
+      console.log('handleFilterFieldBlur b newRange[0]', newRange[0]);
     }
     if (index===1 && value < newRange[0]) {
-      value = parseFloat(newRange[0]);
+      newRange[1] = parseFloat(newRange[0]);
+      newRange[1] = Math.round(newRange[1] * 100) / 100;
     }
-    newRange[index] = Math.round(value * 100) / 100;
+    console.log('handleFilterFieldBlur newRange', newRange);
     if (filters[filterName][0]!==newRange[0] || filters[filterName][1]!==newRange[1]) {
       setFilters((prev) => {
         return {
@@ -1537,7 +1543,7 @@ export default function Diamonds () {
     let { name, value } = e.target;
     let [filterName, index] = name.split('[');
     index = parseInt(index.replace(']', ''));
-    let newRange = filters[filterName];
+    let newRange = [...filters[filterName]];
     value = value.replace(/[^0-9]/g, '');
     value = parseInt(value);
     if (Number.isNaN(value)) {
@@ -1596,7 +1602,7 @@ export default function Diamonds () {
 
   const handleShapesFilterChange = (e, name) => {
     name = name.toUpperCase()
-    let newShapes = filters.shapes;
+    let newShapes = [...filters.shapes];
     if (e.target.checked===true && filters.shapes.indexOf(name)<0) {
       newShapes.push(name);
     } else if (e.target.checked===false && filters.shapes.indexOf(name)>-1) {
@@ -1617,7 +1623,7 @@ export default function Diamonds () {
   };
 
   const handleCertificationsFilterChange = (e, name) => {
-    let newCerts = filters.certifications;
+    let newCerts = [...filters.certifications];
     if (e.target.checked===true && filters.shapes.indexOf(name)<0) {
       newCerts.push(name);
     } else if (e.target.checked===false && filters.certifications.indexOf(name)>-1) {
