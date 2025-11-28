@@ -21,7 +21,7 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 // import sampleItems from './data';
 import useIsIntersecting from '@/hooks/useIsIntersecting';
-import { avenir } from '@/app/fonts';
+// import { avenir } from '@/app/fonts';
 
 const breakpointFilters = '950px';
 
@@ -161,6 +161,10 @@ const GridOptions = styled.div`
     max-width: ${theme.breakpoints.xl};
     display: flex;
     justify-content: space-between;
+
+    @media screen and (max-width: ${theme.breakpoints.sm}) {
+      flex-direction: column;
+    }
   }
 `;
 
@@ -172,6 +176,10 @@ const ResultsCopy = styled.div`
   font-weight: 600;
   color: hsl(0, 0%, 20%);
   margin-left: 8px;
+
+  @media screen and (max-width: ${theme.breakpoints.sm}) {
+    margin-bottom: 4px;
+  }
 `;
 
 const GridOptionsRight = styled.div`
@@ -538,19 +546,13 @@ const FilterItem = styled.div`
     display: flex;
     flex-flow: row nowrap;
 
+    margin-top: 12px;
+
+    @media screen and (max-width: ${breakpointFilters}) {
+      margin-top: 20px;
+    } 
+
     label {
-      display: flex;
-      flex-flow: row nowrap;
-      margin-top: 12px;
-
-      @media screen and (min-width: 501px) and (max-width: ${breakpointFilters}) {
-        margin-top: 24px;
-      } 
-
-      @media screen and (max-width: 500px) {
-        margin-top: 12px;
-      } 
-
       span {
         font-family: ${theme.fonts.primary};
         font-size: 1rem;
@@ -568,12 +570,7 @@ const FilterItem = styled.div`
     }
 
     input {
-      margin-top: -42px;
       margin-left: 10px;
-
-      @media screen and (max-width: 500px) {
-        margin-top: -30px;
-      }
     }
 
     input:checked {

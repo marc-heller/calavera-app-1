@@ -3,13 +3,13 @@ import StyledComponentsRegistry from '@/app/registry';
 // import LayoutClient from '../components/layoutClient';
 import { GlobalStyle } from '@/app/globalStyles';
 import Header from '@/components/Header/Header';
-import { avenir } from '@/app/fonts';
+import { avenircloud } from '@/app/fonts';
 
 export default function RootLayout({ children }) {
   return (
     <StyledComponentsRegistry>
       <GlobalStyle />
-      <html lang="en" className={avenir.variable}>
+      <html lang="en" className={avenircloud.variable}>
         <body> {/* id="layoutBody" className={`${inter.variable}`} */}
           <Header />
           {children}

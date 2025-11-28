@@ -10,7 +10,7 @@ const theme = {
     lightGray: '#f6f7fa',
   },
   fonts: {
-    primary: 'var(--font-avenir), sans-serif',
+    primary: 'var(--font-avenircloud), sans-serif',
     secondary: 'Inter, sans-serif',
   },
   breakpoints: {

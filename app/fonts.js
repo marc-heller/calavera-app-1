@@ -9,7 +9,7 @@ export const inter = Inter({
   weight: ['400', '600']
 })
 
-export const avenir = localFont({
+export const avenircloud = localFont({
   src: [
     {
       path: '../public/fonts/avenir-regular.ttf',
@@ -17,5 +17,5 @@ export const avenir = localFont({
       style: "normal",
     }
   ],
-  variable: "--font-avenir", // optional CSS variable
+  variable: "--font-avenircloud", // optional CSS variable
 });
