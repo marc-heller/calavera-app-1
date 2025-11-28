@@ -101,6 +101,10 @@ const ItemMain = styled.div`
     display: flex;
     align-items: center;
   }
+
+  > div:first-of-type {
+    align-items: flex-start;
+  }
 `;
 
 const ItemHeader = styled.div`
